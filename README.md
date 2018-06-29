@@ -7,14 +7,15 @@ make
 g2 [options] <haps file> <sample file> <genetic map file> <output file>
 ```
 
-Required:
+Required inputs:
 
 | field | description |
 | --- | --- |
 | haps/sample | SHAPEIT/IMPUTE format input phased haplotypes |
-| genetic map file | rows = <physical position> <cm/Mb> <cM> |
+| genetic map file | each row has three fields: [`physical position`] [`cm/Mb`] [`cM`] |
+| output file | Pointer to where the outputs will go |
 
-Options:
+Optional switches:
 
 | switch | description |
 | --- | --- |
