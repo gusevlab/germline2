@@ -1,5 +1,7 @@
 # GREMLIN
 
+Efficiently identifying shared genetic segments in large-scale data.
+
 ## Usage
 
 ```
@@ -11,9 +13,9 @@ Required inputs:
 
 | field | description |
 | --- | --- |
-| haps/sample | SHAPEIT/IMPUTE format input phased haplotypes |
-| genetic map file | each row has three fields: [`physical position`] [`cm/Mb`] [`cM`] |
-| output file | Pointer to where the outputs will go |
+| haps/sample | SHAPEIT/IMPUTE format input phased haplotypes, alleles can be anything as long as haplotype entries are 0/1 |
+| genetic map file | Each row has three fields: [`physical position`] [`cm/Mb`] [`cM`], and the 2nd field is ignored |
+| output file | Pointer to where the outputs will go, will generate an $OUT.match file |
 
 Optional switches:
 
@@ -28,8 +30,12 @@ Optional switches:
 
 ## Output
 
+Output goes into a $OUT.match file with each row containing the following entries:
+
 | ID1 | ID2 | P0 | P1 | cM | # words |
 | --- | --- | --- | --- | --- | --- |
+
+For large data, you can enable binary outputs by adding the `-b` switch, which will generate three files (`$OUT.bmatch/bmid/bsid`) that can be parsed using the provided `parse_bmatch` program (~3x reduction in file size).
 
 ## Example
 
