@@ -9,11 +9,15 @@ g2 [options] <haps file> <sample file> <genetic map file> <output file>
 
 Required:
 
+| field | description |
+| --- | --- |
 | haps/sample | SHAPEIT/IMPUTE format input phased haplotypes |
 | genetic map file | rows = <physical position> <cm/Mb> <cM> |
 
 Options:
 
+| switch | description |
+| --- | --- |
 | -b | Binary output for large files, see parse_bmatch [default = 0/off] |
 | -d | Dynamic hash seed cutoff (for big N) [default = 0/off] |
 | -f | Minimum minor allele frequency [default = 0.0] |
@@ -24,12 +28,17 @@ Options:
 ## Output
 
 | ID1 | ID2 | P0 | P1 | cM | # words |
+| --- | --- | --- | --- | --- | --- |
 
 ## Example
 
 `make test` runs sample data in the `example/` directory using the following command:
 ```
--m 0.9 example/SIM.NE_20000.MATCH_FREQ.SHAPEIT.haps example/SIM.NE_20000.MATCH_FREQ.SHAPEIT.sample example/genMap.1KG.b37.chr1.map example/SIM.NE_20000.MATCH_FREQ.INFERRED.match
+./g2 -m 0.9 \
+example/SIM.NE_20000.MATCH_FREQ.SHAPEIT.haps \
+example/SIM.NE_20000.MATCH_FREQ.SHAPEIT.sample \
+example/genMap.1KG.b37.chr1.map \
+example/SIM.NE_20000.MATCH_FREQ.INFERRED.match
 ```
 
 The output segments are then evaluated for accuracy using the `example/accuracy.sh` script.
