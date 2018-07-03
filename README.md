@@ -4,6 +4,8 @@ Efficiently identifying shared genetic segments in large-scale data.
 
 ## Usage
 
+The `boost/1.57.0` library is required.
+
 ```
 make
 g2 [options] <haps file> <sample file> <genetic map file> <output file>

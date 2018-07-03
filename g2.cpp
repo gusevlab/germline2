@@ -545,7 +545,10 @@ int main (int argc, char* argv[])
 		bmid_out.close();
 		
 		ofstream bsid_out( ( out + ".bsid" ).c_str() );
-		for ( int i = 0 ; i < all_ind.size() ; i+=2 ) bsid_out << all_ind[i].print();
+		for ( int i = 0 ; i < all_ind.size() ; i++ ) {
+			bsid_out << all_ind[i].print();
+			if ( !PAR_HAPLOID ) i++;
+		}
 		bsid_out.close();
 		
 	}
