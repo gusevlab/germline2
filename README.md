@@ -21,10 +21,11 @@ Optional switches:
 
 | switch | description |
 | --- | --- |
-| -b | Binary output for large files, see parse_bmatch [default = 0/off] |
+| -b | Binary output for large files, see parse_bmatch [default off] |
 | -d | Dynamic hash seed cutoff (for big N) [default = 0/off] |
 | -f | Minimum minor allele frequency [default = 0.0] |
 | -g | Allowed gaps between seeds [default = 1] |
+| -h | Haploid mode, do not allow switches between haplotypes [default off] |
 | -m | Minimum match length [default = 1.0] |
 | -s | Skip words with (seeds/samples) less than than this value (for big N) [default = 0.0] |
 
@@ -34,6 +35,8 @@ Output goes into a $OUT.match file with each row containing the following entrie
 
 | ID1 | ID2 | P0 | P1 | cM | # words |
 | --- | --- | --- | --- | --- | --- |
+
+If haploid mode is on (`-h`) then ".0" or ".1" is appended to the IDs to indicate a match along the first or second haplotype.
 
 For large data, you can enable binary outputs by adding the `-b` switch, which will generate three files (`$OUT.bmatch/bmid/bsid`) that can be parsed using the provided `parse_bmatch` program (~3x reduction in file size).
 
