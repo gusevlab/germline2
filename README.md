@@ -35,7 +35,7 @@ Optional switches:
 Output goes into a $OUT.match file with each row containing the following entries:
 
 | ID1 | ID2 | P0 | P1 | cM | # words | # gaps |
-| --- | --- | --- | --- | --- | --- |
+| --- | --- | --- | --- | --- | --- | --- |
 
 If haploid mode is on (`-h`) then ".0" or ".1" is appended to the IDs to indicate a match along the first or second haplotype.
 
