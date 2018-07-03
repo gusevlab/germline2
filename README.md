@@ -11,23 +11,22 @@ g2 [options] <haps file> <sample file> <genetic map file> <output file>
 
 Required inputs:
 
-| field | description |
-| --- | --- |
-| haps/sample | SHAPEIT/IMPUTE format input phased haplotypes, alleles can be anything as long as haplotype entries are 0/1 |
-| genetic map file | Each row has three fields: [`physical position`] [`cm/Mb`] [`cM`], and the 2nd field is ignored |
-| output file | Pointer to where the outputs will go, will generate an $OUT.match file |
+* **haps file**: SHAPEIT/IMPUTE format input phased haplotypes, alleles can be any string as long as haplotype entries are 0/1
+* **sample file**: SHAPEIT/IMPUTE format input sample identifiers, only the second ID column is currently used for output
+* **genetic map file**: Each row has three fields: [`physical position`] [`cm/Mb`] [`cM`], and the 2nd field is ignored
+* **output file**: Pointer to where the outputs will go, will generate an $OUT.match file
 
 Optional switches:
 
 | switch | description |
 | --- | --- |
-| -b | Binary output for large files, see parse_bmatch [default off] |
-| -d | Dynamic hash seed cutoff (for big N) [default = 0/off] |
-| -f | Minimum minor allele frequency [default = 0.0] |
-| -g | Allowed gaps between seeds [default = 1] |
-| -h | Haploid mode, do not allow switches between haplotypes [default off] |
-| -m | Minimum match length [default = 1.0] |
-| -s | Skip words with (seeds/samples) less than than this value (for big N) [default = 0.0] |
+| `-b` | Binary output for large files, see parse_bmatch [default off] |
+| `-d` | Dynamic hash seed cutoff (for big N) [default = 0/off] |
+| `-f` | Minimum minor allele frequency [default = 0.0] |
+| `-g` | Allowed gaps between seeds [default = 1] |
+| `-h` | Haploid mode, do not allow switches between haplotypes [default off] |
+| `-m` | Minimum match length [default = 1.0] |
+| `-s` | Skip words with (seeds/samples) less than than this value (for big N) [default = 0.0] |
 
 ## Output
 
