@@ -29,6 +29,7 @@ int GLOBAL_READ_WORDS = 0;
 int GLOBAL_CURRENT_WORD = 0;
 int GLOBAL_SKIPPED_WORDS = 0;
 bool PAR_BIN_OUT = 0;
+bool PAR_HAPLOID = 0;
 
 ofstream FOUT;
 
@@ -149,18 +150,26 @@ public:
 	// Compute pair of individuals from location indicator
 	pair<unsigned int,unsigned int> locationToPair( unsigned int loc ) {
 		pair<unsigned int,unsigned int> p;
-		p.second = 2 * (loc % num);
-		p.first = 2 * ((loc - p.second/2) / num);
-		// cerr << "location " << loc << " converted to " << p.first << "," << p.second << endl;
+		// round everyone down to the nearest haplotype
+		if ( !PAR_HAPLOID ) {
+			p.second = 2 * (loc % num);
+			p.first = 2 * ((loc - p.second/2) / num);
+		} else {
+			p.second = loc % num;
+			p.first = (loc - p.second) / num;		
+		}
 		return p;
 	}
 	// Compute location from pair of individuals
 	unsigned int pairToLocation( unsigned int i , unsigned int j ) {
-		// round everyone down to the nearest haplotype
-		i = (i - (i % 2)) / 2;
-		j = (j - (j % 2)) / 2;
+	
+		if ( !PAR_HAPLOID ) {
+			// round everyone down to the nearest haplotype
+			i = (i - (i % 2)) / 2;
+			j = (j - (j % 2)) / 2;	
+		}
 		unsigned int loc = (i > j) ? j * num + i : i * num + j;
-		return loc; 
+		return loc;
 	}
 	// Extend or add a given pair in the current hash
 	// unsigned int i,j : identifiers for the two individuals
@@ -299,11 +308,14 @@ int main (int argc, char* argv[])
 	bool opt_error = 0;
 	int c;
 	// load switches
-	while (!opt_error && (c = getopt (argc, argv, "bd:s:g:f:m:")) != -1)
+	while (!opt_error && (c = getopt (argc, argv, "hbd:s:g:f:m:")) != -1)
 		switch (c)
 		{
 		  case 'b':
 			PAR_BIN_OUT = 1;
+			break;
+		  case 'h':
+			PAR_HAPLOID = 1;
 			break;
 		  case 'm':
 			PAR_MIN_MATCH = atof( optarg );
@@ -322,18 +334,19 @@ int main (int argc, char* argv[])
 			break;	
 		  default:
 		  	opt_error = 1;
-			abort ();
 		  }
 
 	cout << endl << "Options:" << endl;
 	cout << "---" << endl;
-	cout << "-b\tBinary output [default = 0/off]                                            " << PAR_BIN_OUT << endl;
-	cout << "-d\tDynamic hash seed cutoff [default = 0/off]                                 " << MAX_seeds << endl;
-	cout << "-f\tMinimum minor allele frequency [default = 0.0]                             " << PAR_MIN_MAF << endl;
-	cout << "-g\tAllowed gaps [default = 1]                                                 " << PAR_GAP << endl;
-	cout << "-m\tMinimum match length [default = 1.0]                                       " << PAR_MIN_MATCH << endl;
-	cout << "-s\tSkip words with (seeds/samples) less than than this value [default = 0.0]  " << PAR_skip << endl;
+	cout << "-b\tBinary output [default off]                                                " << PAR_BIN_OUT << endl;
+	cout << "-d\tDynamic hash seed cutoff [default 0/off]                                   " << MAX_seeds << endl;
+	cout << "-f\tMinimum minor allele frequency [default 0.0]                               " << PAR_MIN_MAF << endl;
+	cout << "-g\tAllowed gaps [default 1]                                                   " << PAR_GAP << endl;
+	cout << "-h\tHaploid mode, do not allow switches between haplotypes [default off]       " << PAR_HAPLOID << endl;
+	cout << "-m\tMinimum match length [default 1.0]                                         " << PAR_MIN_MATCH << endl;
+	cout << "-s\tSkip words with (seeds/samples) less than than this value [default 0.0]    " << PAR_skip << endl;
 	cout << endl;
+	if ( opt_error == 1 ) abort ();
 	
 	// load parameters
 	if(opt_error || argc - optind != 4){
@@ -396,15 +409,21 @@ int main (int argc, char* argv[])
 	while(getline(file_samp,line)) {
 		ss.clear(); ss.str( line );
 		ss >> map_field[0] >> map_field[1];
-		all_ind.push_back( Individual(map_field[0],map_field[1],idctr) );
-		all_ind.push_back( Individual(map_field[0],map_field[1],idctr) );
+		if ( PAR_HAPLOID ) {
+			all_ind.push_back( Individual(map_field[0],(map_field[1]+".0").c_str(),idctr) );
+			idctr++;		
+			all_ind.push_back( Individual(map_field[0],(map_field[1]+".1").c_str(),idctr) );
+		} else {
+			all_ind.push_back( Individual(map_field[0],map_field[1],idctr) );
+			all_ind.push_back( Individual(map_field[0],map_field[1],idctr) );
+		}
 		idctr++;		
 	}
 	file_samp.close();
 	num_ind = all_ind.size();
 	
 	cerr << "*** runtime : " << get_cpu_time() - TIME_start << "\t";
-	cerr << num_ind << " sample identifiers read" << endl;
+	cerr << num_ind / 2 << " sample identifiers read" << endl;
 	
 	Marker cur_marker;
 	// track position through genetic map
@@ -419,7 +438,7 @@ int main (int argc, char* argv[])
 	hash_size word[2];
 	
 	// Storage for extensions
-	ExtendHash extend( num_ind / 2 );
+	ExtendHash extend( PAR_HAPLOID ? num_ind : num_ind / 2 );
 
 	// Hash individual words
 	GLOBAL_READ_WORDS = 0;
