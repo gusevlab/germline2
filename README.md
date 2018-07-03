@@ -1,4 +1,4 @@
-# GREMLIN
+# :herb: GREMLIN
 
 Efficiently identifying shared genetic segments in large-scale data.
 
