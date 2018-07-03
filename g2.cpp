@@ -100,6 +100,7 @@ long getPos( int w ) {
 
 struct Match {
 	int interval[2] = {0,0};
+	unsigned int gaps = 0;
 	// Print this match
 	// pair : identifiers for the corresponding individuals in all_ind
 	void print( pair<unsigned int,unsigned int> p ) {
@@ -122,7 +123,8 @@ struct Match {
 						<< getPos( interval[0] * WORD_SIZE ) << "\t" 
 						<< getPos( interval[1] * WORD_SIZE + WORD_SIZE - 1 ) << "\t" 
 						<< mlen << "\t" 
-						<< interval[1] - interval[0] + 1 << "\t";
+						<< interval[1] - interval[0] + 1 << "\t"
+						<< gaps - PAR_GAP;
 				FOUT << endl;
 			}
 		}
@@ -130,6 +132,9 @@ struct Match {
 
 	void extend( int w ) {
 		if ( interval[1] < w ) interval[1] = w;
+	}
+	void addGap() {
+		gaps++;
 	}
 	Match(int);
 	Match(void);
@@ -188,7 +193,10 @@ public:
 			if ( it->second.interval[1] < w ) {
 				it->second.print( locationToPair(it->first) );
 				it = extend_hash.erase( it );
-			} else it++;
+			} else {
+				if ( it->second.interval[1] < GLOBAL_CURRENT_WORD ) it->second.addGap();
+				it++;
+			}
 		}
 	}
 
