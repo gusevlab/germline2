@@ -1,6 +1,8 @@
-# :herb: GREMLIN
+# :herb: GERMLINE2
 
 Efficiently identifying shared genetic segments in large-scale data.
+
+Reference: Saada et al. [Identity-by-descent detection across 487,409 British samples reveals fine scale population structure and ultra-rare variant associations](https://www.nature.com/articles/s41467-020-19588-x), 2020, Nature Communications
 
 ## Usage
 
